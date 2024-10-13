@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torneo di Biscotti</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        #biscottiList {
+            margin: 20px 0;
+        }
+        .biscotto {
+            margin: 5px 0;
+        }
+        .tournament {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Torneo di Biscotti</h1>
+
+    <div>
+        <label for="biscottoInput">Inserisci il nome del biscotto:</label>
+        <input type="text" id="biscottoInput" placeholder="Nome del biscotto">
+        <button onclick="aggiungiBiscotto()">Aggiungi Biscotto</button>
+    </div>
+
+    <div id="biscottiList">
+        <h3>Biscotti inseriti:</h3>
+        <ul id="listaBiscotti"></ul>
+    </div>
+
+    <div>
+        <button onclick="generaTorneo()">Genera Torneo</button>
+    </div>
+
+    <div class="tournament">
+        <h3>Gironi del Torneo:</h3>
+        <ul id="gironiTorneo"></ul>
+    </div>
+
+    <script>
+        let biscotti = [];
+
+        function aggiungiBiscotto() {
+            const nomeBiscotto = document.getElementById("biscottoInput").value;
+            if (nomeBiscotto.trim() !== "") {
+                biscotti.push(nomeBiscotto);
+                document.getElementById("biscottoInput").value = "";
+                aggiornaListaBiscotti();
+            }
+        }
+
+        function aggiornaListaBiscotti() {
+            const lista = document.getElementById("listaBiscotti");
+            lista.innerHTML = "";
+            biscotti.forEach((biscotto, index) => {
+                const li = document.createElement("li");
+                li.textContent = biscotto;
+                lista.appendChild(li);
+            });
+        }
+
+        function generaTorneo() {
+            if (biscotti.length < 2) {
+                alert("Inserisci almeno 2 biscotti per generare il torneo.");
+                return;
+            }
+
+            const gironi = [];
+            const biscottiCopia = [...biscotti];
+            while (biscottiCopia.length > 1) {
+                const biscotto1 = biscottiCopia.pop();
+                const biscotto2 = biscottiCopia.pop();
+                gironi.push([biscotto1, biscotto2]);
+            }
+
+            if (biscottiCopia.length === 1) {
+                gironi.push([biscottiCopia.pop(), "Passa automaticamente"]);
+            }
+
+            mostraGironi(gironi);
+        }
+
+        function mostraGironi(gironi) {
+            const listaGironi = document.getElementById("gironiTorneo");
+            listaGironi.innerHTML = "";
+            gironi.forEach((girone, index) => {
+                const li = document.createElement("li");
+                li.textContent = `Girone ${index + 1}: ${girone[0]} vs ${girone[1]}`;
+                listaGironi.appendChild(li);
+            });
+        }
+    </script>
+
+</body>
+</html>
